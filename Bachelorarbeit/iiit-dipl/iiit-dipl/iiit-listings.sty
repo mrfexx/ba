@@ -1,0 +1,83 @@
+%% $Id: iiit-listings.sty 271 2013-11-29 09:42:46Z Nuernberg $
+%% $Author: Nuernberg $
+%% $Date: 2013-11-29 10:42:46 +0100 (Fri, 29 Nov 2013) $
+%% $Revision: 271 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-listings}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paketoptionen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifiiit@utfviii \iiit@utfviiifalse
+\DeclareOption{utf8}{\iiit@utfviiitrue}
+\ProcessOptions\relax
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[final]{listings}
+\ifiiit@utfviii
+    \RequirePackage{listingsutf8}
+\fi
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Listings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\lstset{
+    breaklines,
+    mathescape=false,
+    columns=fullflexible,
+    tabsize=4,
+    extendedchars,
+    xleftmargin=2em,
+    basicstyle=\ttfamily,
+    showstringspaces=false,
+    emptylines=*2,
+    frame=single,
+    numbers=left,
+    numberstyle=\footnotesize\sffamily,
+    numbersep=0.5em,
+    literate={[]}{[{$\;$}]}3
+}
+
+\ifiiit@utfviii
+    \lstset{inputencoding=utf8/latin1}
+\fi
+
+\lstdefinestyle{matlab}{
+    basicstyle=\footnotesize\ttfamily,
+    columns=flexible,
+    language=matlab,
+    backgroundcolor=\color[rgb]{0.9,0.9,0.9},
+    moredelim=[l][\bfseries\itshape]{\%\%},
+    morekeywords = {switch, case, inf}
+}
+
+\lstdefinestyle{C++}{
+    basicstyle=\footnotesize\ttfamily,
+    columns=flexible,
+    language=C++,
+    backgroundcolor=\color[rgb]{0.9,0.9,0.9}
+}
+
+\lstdefinestyle{latex}{
+    basicstyle=\footnotesize\ttfamily,
+    columns=flexible,
+    language=[LaTeX]{TeX},
+    backgroundcolor=\color[rgb]{0.9,0.9,0.9}
+}
+
+\lstdefinestyle{other}{
+    basicstyle=\footnotesize\ttfamily,
+    columns=flexible,
+    backgroundcolor=\color[rgb]{0.9,0.9,0.9}
+}
+
+ 

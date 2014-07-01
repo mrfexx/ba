@@ -1,0 +1,35 @@
+%% $Id: iiit-encoding.sty 217 2013-08-06 15:39:03Z Nuernberg $
+%% $Author: Nuernberg $
+%% $Date: 2013-08-06 17:39:03 +0200 (Tue, 06 Aug 2013) $
+%% $Revision: 217 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-encoding}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paketoptionen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifIIIT@ansinew \IIIT@ansinewtrue %default ansinew
+\newif\ifIIIT@utfviii \IIIT@utfviiifalse
+\newif\ifIIIT@latini \IIIT@latinifalse
+
+\DeclareOption{ansinew}{\IIIT@ansinewtrue\IIIT@utfviiifalse\IIIT@latinifalse}   % ansinew als Zeichenkodierung
+\DeclareOption{utf8}{\IIIT@utfviiitrue\IIIT@ansinewfalse\IIIT@latinifalse}      % utfviii als Zeichenkodierung
+\DeclareOption{latin1}{\IIIT@latinitrue\IIIT@ansinewfalse\IIIT@utfviiifalse}    % latin1 als Zeichenkodierung
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage[TS1,T1]{fontenc}        % Europ\"aischer Zeichensatz
+\ifIIIT@ansinew
+	\RequirePackage[ansinew]{inputenc}  % Direkte Eingabe von Umlauten mit ANSI
+\fi
+\ifIIIT@utfviii
+	\RequirePackage[utf8]{inputenc}     % Direkte Eingabe von Umlauten mit UTF8
+\fi
+\ifIIIT@latini
+	\RequirePackage[latin1]{inputenc}   % Direkte Eingabe von Umlauten mit latin1
+\fi

@@ -1,0 +1,168 @@
+%% $Id: iiit-font.sty 295 2014-02-19 12:55:40Z nuernberg $
+%% $Author: nuernberg $
+%% $Date: 2014-02-19 13:55:40 +0100 (Wed, 19 Feb 2014) $
+%% $Revision: 295 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-font}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paketoptionen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifiiit@newrm \iiit@newrmfalse
+\newif\ifiiit@newsf \iiit@newsffalse
+\newif\ifiiit@newtt \iiit@newttfalse
+
+% Standard
+\newif\ifiiit@fontlmodern \iiit@fontlmoderntrue
+
+% Serifen
+\newif\ifiiit@fonttimes \iiit@fonttimesfalse
+\newif\ifiiit@fontpalatino \iiit@fontpalatinofalse
+\newif\ifiiit@fontminion \iiit@fontminionfalse
+
+% Sans Serifen
+\newif\ifiiit@fonthelvet \iiit@fonthelvetfalse
+\newif\ifiiit@fontbera \iiit@fontberafalse
+\newif\ifiiit@fontoptima \iiit@fontoptimafalse
+\newif\ifiiit@fontmyriad \iiit@fontmyriadfalse
+\newif\ifiiit@fontfrutiger \iiit@fontfrutigerfalse
+
+% Monospace
+\newif\ifiiit@fontcourier \iiit@fontcourierfalse
+\newif\ifiiit@fontberamono \iiit@fontberamonofalse
+
+% Microtype
+\newif\ifiiit@microtype \iiit@microtypefalse
+
+% Old Style Figures / Lining Figures
+\newif\ifiiit@osf \iiit@osffalse
+
+
+\DeclareOption{nolmodern}{\iiit@fontlmodernfalse}
+\DeclareOption{cmodern}{\iiit@fontlmodernfalse}
+
+\DeclareOption{times}{\iiit@fonttimestrue\iiit@fontpalatinofalse\iiit@fontminionfalse\iiit@newrmtrue}
+\DeclareOption{palatino}{\iiit@fontpalatinotrue\iiit@fonttimesfalse\iiit@fontminionfalse\iiit@newrmtrue}
+\DeclareOption{minion}{\iiit@fontminiontrue\iiit@fonttimesfalse\iiit@fontpalatinofalse\iiit@newrmtrue}
+
+\DeclareOption{helvet}{\iiit@fonthelvettrue\iiit@fontberafalse\iiit@fontoptimafalse\iiit@fontmyriadfalse\iiit@fontfrutigerfalse\iiit@newsftrue}
+\DeclareOption{helvetica}{\iiit@fonthelvettrue\iiit@fontberafalse\iiit@fontoptimafalse\iiit@fontmyriadfalse\iiit@fontfrutigerfalse\iiit@newsftrue}
+\DeclareOption{bera}{\iiit@fontberatrue\iiit@fonthelvetfalse\iiit@fontoptimafalse\iiit@fontmyriadfalse\iiit@fontfrutigerfalse\iiit@newsftrue}
+\DeclareOption{optima}{\iiit@fontoptimatrue\iiit@fonthelvetfalse\iiit@fontberafalse\iiit@fontmyriadfalse\iiit@fontfrutigerfalse\iiit@newsftrue}
+\DeclareOption{myriad}{\iiit@fontmyriadtrue\iiit@fonthelvetfalse\iiit@fontberafalse\iiit@fontoptimafalse\iiit@fontfrutigerfalse\iiit@newsftrue}
+\DeclareOption{frutiger}{\iiit@fontfrutigertrue\iiit@fonthelvetfalse\iiit@fontberafalse\iiit@fontoptimafalse\iiit@fontmyriadfalse\iiit@newsftrue}
+
+\DeclareOption{courier}{\iiit@fontcouriertrue\iiit@fontberamonofalse\iiit@newtttrue}
+\DeclareOption{beramono}{\iiit@fontberamonotrue\iiit@fontcourierfalse\iiit@newtttrue}
+
+\DeclareOption{microtype}{\iiit@microtypetrue}
+
+\DeclareOption{osf}{\iiit@osftrue\PassOptionsToPackage{osf}{mathpazo}}
+\DeclareOption{lf}{\iiit@osffalse}
+
+\ProcessOptions\relax
+
+% tufte-book class:
+% \RequirePackage[osf,sc]{mathpazo}
+% \RequirePackage[scaled=0.90]{helvet}
+% \RequirePackage[scaled=0.85]{beramono}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifiiit@newrm
+    \ifiiit@newsf
+        \ifiiit@newtt
+            % alle Schriftstile werden ersetzt -> lmodern muss nicht geladen werden
+            \iiit@fontlmodernfalse
+        \fi
+    \fi
+\fi
+
+\ifiiit@fontlmodern
+    \typeout{Using Font Set LATIN MODERN^^J}
+    \RequirePackage{lmodern} % beinhaltet serifen, serifenlos und monospace
+    % kein globaler Schalter fuer osf/lf verfuegbar, \oldstylenums{} verwenden
+\fi
+
+\ifiiit@newrm
+    \ifiiit@fonttimes
+        \typeout{Using Font Set TIMES^^J}
+        \renewcommand\rmdefault{txr} % aendert nur Textschrift
+        % \RequirePackage{txfonts} % aendert Textschrift und Matheschrift, Konflikt mit amsmath
+        % kein globaler Schalter fuer osf/lf verfuegbar, \oldstylenums{} verwenden
+    \fi
+
+    \ifiiit@fontpalatino
+        \typeout{Using Font Set PALATINO^^J}
+        \RequirePackage[sc]{mathpazo}
+        \linespread{1.05}
+    \fi
+
+    \ifiiit@fontminion
+        \typeout{Using Font Set MINION^^J}
+        % muss nachtr\"aglich installiert werden
+        \ifiiit@osf
+            \RequirePackage[textosf,mathlf]{MinionPro}         
+        \else
+            \RequirePackage[lf]{MinionPro}
+        \fi
+        % MinionPro Paket l\"adt MnSymbol, welches unvertr\"aglich mit amssymb ist.
+    \fi
+\fi
+
+\ifiiit@newsf
+    \ifiiit@fonthelvet
+        \typeout{Using Font Set HELVETICA^^J}
+        \ifiiit@fonttimes
+            \RequirePackage[scaled=.92]{helvet}
+        \else
+            \ifiiit@fontpalatino
+                \RequirePackage[scaled=.95]{helvet}
+            \else
+                \RequirePackage{helvet}
+            \fi
+        \fi
+    \fi
+
+    \ifiiit@fontbera
+        \typeout{Using Font Set BERA SANS^^J}
+        \RequirePackage[scaled]{berasans}
+    \fi
+
+    \ifiiit@fontoptima
+        \typeout{Using Font Set OPTIMA^^J}
+        \renewcommand{\sfdefault}{uop}          % muss nachtr\"aglich installiert werden
+    \fi
+
+    \ifiiit@fontmyriad
+        \typeout{Using Font Set MYRIAD^^J}
+        \renewcommand{\sfdefault}{Myriad-LF}    % muss nachtr\"aglich installiert werden
+    \fi
+    
+    \ifiiit@fontfrutiger
+        \typeout{Using Font Set FRUTIGER^^J}
+        \RequirePackage{bfrutiger}              % muss nachtr\"aglich installiert werden
+    \fi
+\fi
+
+\ifiiit@newtt
+    \ifiiit@fontcourier
+        \typeout{Using Font Set COURIER^^J}
+        \RequirePackage[scaled=1.1]{couriers}
+    \fi
+    
+    \ifiiit@fontberamono
+        \typeout{Using Font Set BERA MONO^^J}
+        \RequirePackage[scaled=0.85]{beramono}
+    \fi
+\fi
+
+\ifiiit@microtype
+    \RequirePackage[final]{microtype}
+\fi
+	

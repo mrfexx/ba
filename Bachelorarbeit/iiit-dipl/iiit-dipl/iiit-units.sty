@@ -1,0 +1,25 @@
+%% $Id: iiit-units.sty 300 2014-04-30 15:13:25Z nuernberg $
+%% $Author: nuernberg $
+%% $Date: 2014-04-30 17:13:25 +0200 (Wed, 30 Apr 2014) $
+%% $Revision: 300 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-units}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{siunitx}            % Einheiten
+\sisetup{
+    binary-units=true,
+    load-configurations=abbreviations,
+    exponent-product = \cdot, 
+    output-product = \times,
+    detect-family=true,
+    detect-display-math=false,
+    detect-all=true
+}
+\addto\extrasngerman{\sisetup{locale = DE}}
+\addto\extrasenglish{\sisetup{locale = UK}}
+

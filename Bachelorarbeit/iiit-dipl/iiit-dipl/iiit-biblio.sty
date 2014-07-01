@@ -1,0 +1,427 @@
+%% $Id: iiit-biblio.sty 313 2014-06-11 06:41:29Z nuernberg $
+%% $Author: nuernberg $
+%% $Date: 2014-06-11 08:41:29 +0200 (Wed, 11 Jun 2014) $
+%% $Revision: 313 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-biblio}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paketoptionen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \newif\ifIIIT@biblatex \IIIT@biblatexfalse 
+
+\newif\ifIIIT@bibdipl \IIIT@bibdipltrue
+\newif\ifIIIT@bibdiss \IIIT@bibdissfalse
+
+\newif\ifIIIT@alpha \IIIT@alphatrue
+\newif\ifIIIT@boldauthors \IIIT@boldauthorstrue
+\newif\ifIIIT@bibsmall \IIIT@bibsmallfalse
+\newif\ifIIIT@etalnameformat \IIIT@etalnameformatfalse
+
+\newif\ifIIIT@bibtotoc \IIIT@bibtotocfalse
+\newif\ifIIIT@bibsectotoc \IIIT@bibtotocfalse
+
+\newif\ifIIIT@biblatex \IIIT@biblatexfalse
+\newif\ifIIIT@bibdraft \IIIT@bibdraftfalse
+
+\newif\ifIIIT@bibinits \IIIT@bibinitsfalse
+\newif\ifIIIT@biblastfirst \IIIT@biblastfirsttrue
+\newif\ifIIIT@bibfirstlast \IIIT@bibfirstlastfalse
+\newif\ifIIIT@biblastfirstfirstlast \IIIT@biblastfirstfirstlastfalse
+
+\DeclareOption{biblatex}{\IIIT@biblatextrue}                            % BibLaTeX statt BibTeX benutzen
+
+\DeclareOption{bibtotoc}{\IIIT@bibtotoctrue}                            % Literaturverzeichnis ins Inhaltsverzeichnis
+\DeclareOption{bibsectotoc}{\IIIT@bibsectotoctrue}                      % Unterliteraturverzeichnisse ins Inhaltsverzeichnis
+\DeclareOption{bibsmall}{\IIIT@bibsmalltrue}                            % Literaturverzeichnis in kleiner Schrift
+\DeclareOption{bibdraft}{\IIIT@bibdrafttrue}                            % Nur BibtexKey schreiben, statt Nummer (nur fuer diss und biblatex definiert)
+
+\DeclareOption{dipl}{\IIIT@bibdipltrue\IIIT@bibdissfalse}               % Biblio-Format für Abschlussarbeiten
+\DeclareOption{diss}{\IIIT@bibdisstrue\IIIT@bibdiplfalse}               % Biblioformat für Dissertationen
+
+\DeclareOption{bibalpha}{\IIIT@alphatrue}                               % numerische Zitierstil
+\DeclareOption{bibplain}{\IIIT@alphafalse}                              % Zitierstil mit Autorenkuezel
+\DeclareOption{bold}{\IIIT@boldauthorstrue}                             % Autoren fett darstellen
+\DeclareOption{caps}{\IIIT@boldauthorsfalse}                            % Autoren in Kapitaelchen darstellen
+\DeclareOption{etalnameformat}{\IIIT@etalnameformattrue}                % et al. im selben Format wie Namen ausgeben
+
+\DeclareOption{bibinits}{\IIIT@bibinitstrue}                            % Vornamen nur als Initialen (nur mit biblatex)
+\DeclareOption{biblastfirst}{\IIIT@biblastfirsttrue}                    % Autorenformat: Nachname, Vorname,...
+\DeclareOption{bibfirstlast}{\IIIT@bibfirstlasttrue}                    % Autorenformat: Vorname Nachname,...
+\DeclareOption{biblastfirstfirstlast}{\IIIT@biblastfirstfirstlasttrue}  % Autorenformat: Nachname, Vorname, Vorname Nachname,...
+
+\ProcessOptions\relax
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{babel}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sprache
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Begriffe
+\newcommand{\mypubname}{}
+\newcommand{\studentworkname}{}
+
+% deutsch
+\addto\captionsngerman{\renewcommand{\mypubname}{Eigene Ver\"offentlichungen}}
+\addto\captionsngerman{\renewcommand{\studentworkname}{Betreute studentische Arbeiten}}
+
+% english
+\addto\captionsenglish{\renewcommand{\mypubname}{List of Publications}}
+\addto\captionsenglish{\renewcommand{\studentworkname}{List of Supervised Theses}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Definitions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\ifIIIT@bibdiss
+    \ifIIIT@biblatex
+        \ifIIIT@bibdraft  % Nur BibtexKey schreiben, statt Nummer
+             \RequirePackage[backend=biber,style=draft,bibencoding=utf8,language=auto,doi=false,url=false,isbn=false,maxcitenames=2,defernumbers=true]{biblatex}%
+        \else
+            \ifIIIT@alpha
+                \RequirePackage[backend=biber,style=alphabetic,sorting=nyt,bibencoding=utf8,language=auto,doi=false,url=false,isbn=false,maxcitenames=2,\ifIIIT@bibinits firstinits\fi,defernumbers=true]{biblatex}%
+             \else
+                \RequirePackage[backend=biber,style=numeric-comp,sorting=nyt,bibencoding=utf8,language=auto,doi=false,url=false,isbn=false,maxcitenames=2,\ifIIIT@bibinits firstinits\fi,defernumbers=true]{biblatex}%
+             \fi
+        \fi
+
+        \RequirePackage{csquotes}%
+        %bibencoding=utf8 JabRef speichert alles als utf8, daher hier benutzen
+        %defernumbers=true f"ur korrekte Nummerierung von eigenen Ver"offentlichungen und Betreuten Arbeiten
+        %isbn=false keine ISBN Nummern anzeigen
+        %url=false keine URLs anzeigen
+        %doi=false keine DOIs anzeigen
+        
+        % Anzal der maximal angezeigten Namen "andern
+        \newcommand\setmaxbibnames[1]{\renewcommand\blx@maxbibnames{#1}}
+        
+        % auch in deutschen Verzeichnissen 'et al' verwenden
+        \DefineBibliographyStrings{ngerman}{andothers={et\addabbrvspace al\adddot}}%
+        
+        % Formatierung Namen
+        \newcommand{\iiit@nameformat}{%
+            \ifIIIT@boldauthors
+                \bfseries\sffamily%
+            \else
+                \scshape%
+            \fi
+        }
+        \DeclareNameFormat{last-first}{%
+            \iffirstinits%
+                {\usebibmacro{name:last-first}{{\iiit@nameformat#1}}{{\iiit@nameformat#4}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+                {\usebibmacro{name:last-first}{{\iiit@nameformat#1}}{{\iiit@nameformat#3}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+            {\ifIIIT@etalnameformat\iiit@nameformat\fi\usebibmacro{name:andothers}}}
+            
+        \DeclareNameFormat{first-last}{%
+            \iffirstinits%
+                {\usebibmacro{name:first-last}{{\iiit@nameformat#1}}{{\iiit@nameformat#4}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+                {\usebibmacro{name:first-last}{{\iiit@nameformat#1}}{{\iiit@nameformat#3}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+            {\ifIIIT@etalnameformat\iiit@nameformat\fi\usebibmacro{name:andothers}}}
+        
+        \DeclareNameFormat{last-first/first-last}{%
+            \ifnumequal{\value{listcount}}{1}
+                {\iffirstinits%
+                    {\usebibmacro{name:last-first}{{\iiit@nameformat#1}}{{\iiit@nameformat#4}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+                    {\usebibmacro{name:last-first}{{\iiit@nameformat#1}}{{\iiit@nameformat#3}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+                }%
+                {\iffirstinits%
+                    {\usebibmacro{name:first-last}{{\iiit@nameformat#1}}{{\iiit@nameformat#4}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+                    {\usebibmacro{name:first-last}{{\iiit@nameformat#1}}{{\iiit@nameformat#3}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+                }%
+            {\ifIIIT@etalnameformat\iiit@nameformat\fi\usebibmacro{name:andothers}}}   
+        
+        % Reihenfolge Namen
+        \ifIIIT@biblastfirst % Nachname, Vorname,...
+            \DeclareNameAlias{default}{last-first}%
+        \fi%
+        \ifIIIT@bibfirstlast % Vorname Nachname,...
+            \DeclareNameAlias{default}{first-last}%
+        \fi%
+        \ifIIIT@biblastfirstfirstlast % Nachname, Vorname, Vorname Nachname,...
+            \DeclareNameAlias{default}{last-first/first-last}%
+        \fi%
+        
+        \DeclareFieldFormat*{title}{{\itshape #1}}%
+
+        \DefineBibliographyStrings{ngerman}{%
+            bibliography={Literaturverzeichnis}%
+        }
+
+        \defbibheading{bibliography}[\bibname]{%
+            \@ifundefined{c@chapter}{%
+                \section*{#1}%
+                \markboth{#1}{#1}%
+            }{%
+                \chapter*{#1}%
+                \markboth{#1}{#1}%
+            }%
+        }%
+
+        \defbibheading{subbibliography}[\bibname]{%
+            \@ifundefined{c@chapter}{%
+                \subsection*{#1}%
+                \markboth{#1}{#1}%
+            }{%
+                \section*{#1}%
+                \markboth{#1}{#1}%
+            }%
+        }%
+
+        \DeclareBibliographyAlias{studienarbeit}{thesis}%
+        \DeclareBibliographyAlias{bachelorarbeit}{thesis}%
+        \DeclareBibliographyAlias{masterarbeit}{thesis}%
+        \DeclareBibliographyAlias{diplomarbeit}{thesis}%
+        
+        \newcommand{\citepub}[1]{\cite{#1}} % Alias zur Kompatibilit"at mit multibib
+        \newcommand{\citedasa}[1]{\cite{#1}} % Alias zur Kompatibilit"at mit multibib
+        
+        \ifIIIT@bibsmall
+            \renewcommand*{\bibfont}{\small}
+        \fi
+        
+    \else
+        % \typeout{bibtex!^^J}
+        \RequirePackage{multibib}               % Mehrere Literaturverzeichnisse
+        \RequirePackage[fixlanguage]{babelbib}  % Mehrsprachiges Literaturverzeichnis
+        \iflanguage{english}{\selectbiblanguage{english}}{\selectbiblanguage{ngerman}}
+
+        \AtBeginDocument{
+            % \mypubname und \studentworkname erst bei \begin{document} korrekt definiert
+            \newcites{pub,dasa}{\mypubname,\studentworkname}
+            \ifIIIT@alpha
+                \ifIIIT@bibfirstlast
+                    \bibliographystyle{babalpha-fl}%
+                    \bibliographystylepub{babalpha-fl}%
+                    \bibliographystyledasa{babalpha-fl}%
+                \else
+                    \bibliographystyle{babalpha-lf}%
+                    \bibliographystylepub{babalpha-lf}%
+                    \bibliographystyledasa{babalpha-lf}%
+                \fi
+            \else
+                \ifIIIT@bibfirstlast
+                    \bibliographystyle{babplain-fl}%
+                    \bibliographystylepub{babplain-fl}%
+                    \bibliographystyledasa{babplain-fl}%
+                \else
+                    \bibliographystyle{babplain-lf}%
+                    \bibliographystylepub{babplain-lf}%
+                    \bibliographystyledasa{babplain-lf}%
+                \fi
+            \fi
+        }
+
+        % \bib@heading so umdefinieren, dass zus"atzliche Literaturverzeichnisse als sections gesetzt werden
+        \AtBeginDocument{\let\IIIT@bibname\bibname} % Bibliographie-Name sichern
+        \renewcommand*\bib@heading{%
+            \ifthenelse{\equal{\bibname}{\IIIT@bibname}}%
+                {\ifIIIT@bibtotoc \addchap{\bibname} \else \chapter*{\bibname} \fi}%
+                {\ifIIIT@bibsectotoc \addsec{\bibname} \else \section*{\bibname} \fi}%
+            \@mkboth{\IIIT@bibname}{\IIIT@bibname}%
+        }
+
+        % \manuallabelwidth ist standardm"a"sig leer, Labelbreite wird dann automatisch gew"ahlt; durch \manuallabelwidth{100} kann
+        % die Labelbreite z.B. auf die Breite von "100" gesetzt werden. Dies kann vor der ersten \bibliography-Anweisung
+        % stehen, oder vor der ersten section, die 100 "uberschreitet. Die automatische Wahl setzt die Breite manchmal
+        % fehlerhaft auf 10
+        \def\manuallabelwidth#1{\def\IIIT@manuallabelwidth{#1}}%
+
+        % Formatierung Literaturverzeichnis
+        \let\IIIT@thebibliography\thebibliography%
+        \let\IIIT@endthebibliography\endthebibliography%
+        \renewenvironment{thebibliography}[1]{%
+            \@ifundefined{\IIIT@manuallabelwidth}%
+                {\IIIT@thebibliography{#1}}%
+                {\IIIT@thebibliography{\IIIT@manuallabelwidth}}%
+            \itemsep\z@ % kleinerer Abstand zwischen einzelnen Eintr"agen
+            \ifIIIT@bibsmall \small \fi%
+        }{%
+            \IIIT@endthebibliography%
+        }%
+
+        % Namen im Literaturverzeichnis  (=> f"ur babplain / babalpha / ...)
+        \ifIIIT@boldauthors
+            \renewcommand{\btxnamefont}[1]{{\bfseries\sffamily #1}}%
+        \else
+            \renewcommand{\btxnamefont}[1]{{\sc #1}}%
+        \fi
+    \fi
+\fi
+
+\ifIIIT@bibdipl
+    \ifIIIT@biblatex
+        \ifIIIT@alpha
+            \typeout{^^J** Set style to: alphabetic.^^J}%
+            \RequirePackage[backend=biber,style=alphabetic,sorting=nyt,bibencoding=utf8,defernumbers=true,language=auto,doi=false,url=false,isbn=false,\ifIIIT@bibinits firstinits\fi]{biblatex}%
+        \else
+            \typeout{^^J** Set style to: numeric-comp.^^J}%
+            \RequirePackage[backend=biber,style=numeric-comp,sorting=nyt,bibencoding=utf8,defernumbers=true,language=auto,doi=false,url=false,isbn=false,\ifIIIT@bibinits firstinits\fi]{biblatex}%
+        \fi
+        \RequirePackage{csquotes}%
+        %bibencoding=utf8 JabRef speichert alles als utf8, daher hier benutzen
+        %defernumbers=true f"ur korrekte Nummerierung von eigenen Ver"offentlichungen und Betreuten Arbeiten
+        %isbn=false keine ISBN Nummern anzeigen
+        %url=false keine URLs anzeigen
+        %doi=false keine DOIs anzeigen
+        
+        % auch in deutschen Verzeichnissen 'et al' verwenden
+        \DefineBibliographyStrings{ngerman}{andothers={et\addabbrvspace al\adddot}}%
+        
+        % Formatierung Namen
+        \newcommand{\iiit@nameformat}{%
+            \ifIIIT@boldauthors%
+                \bfseries\sffamily%
+            \else%
+                \scshape%
+            \fi%
+        }
+        \DeclareNameFormat{last-first}{%
+            \iffirstinits%
+                {\usebibmacro{name:last-first}{{\iiit@nameformat#1}}{{\iiit@nameformat#4}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+                {\usebibmacro{name:last-first}{{\iiit@nameformat#1}}{{\iiit@nameformat#3}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+            {\ifIIIT@etalnameformat\iiit@nameformat\fi\usebibmacro{name:andothers}}}%
+            
+        \DeclareNameFormat{first-last}{%
+            \iffirstinits%
+                {\usebibmacro{name:first-last}{{\iiit@nameformat#1}}{{\iiit@nameformat#4}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+                {\usebibmacro{name:first-last}{{\iiit@nameformat#1}}{{\iiit@nameformat#3}}{{\iiit@nameformat#5}}{{\iiit@nameformat#7}}}%
+            {\ifIIIT@etalnameformat\iiit@nameformat\fi\usebibmacro{name:andothers}}}%
+        
+        % Reihenfolge Namen
+        \ifIIIT@bibfirstlast % Vorname Nachname,...
+            \DeclareNameAlias{default}{first-last}
+        \else % Nachname, Vorname,...
+            \DeclareNameAlias{default}{last-first}%
+        \fi
+
+        \DefineBibliographyStrings{ngerman}{%
+            bibliography={Literaturverzeichnis}%
+        }
+
+        \defbibheading{bibliography}[\bibname]{%
+            \@ifundefined{c@chapter}{%
+                \section*{#1}%
+                \markboth{#1}{#1}%
+            }{%
+                \chapter*{#1}%
+                \markboth{#1}{#1}%
+            }%
+        }%
+
+        \defbibheading{subbibliography}[\bibname]{%
+            \@ifundefined{c@chapter}{%
+                \subsection*{#1}%
+                \markboth{#1}{#1}%
+            }{%
+                \section*{#1}%
+                \markboth{#1}{#1}%
+            }%
+        }%
+
+        \DeclareBibliographyAlias{studienarbeit}{thesis}%
+        \DeclareBibliographyAlias{bachelorarbeit}{thesis}%
+        \DeclareBibliographyAlias{masterarbeit}{thesis}%
+        \DeclareBibliographyAlias{diplomarbeit}{thesis}%
+        
+    \else
+        \iflanguage{english}{%
+            \typeout{^^J** Set style to: English.^^J}%
+            \ifIIIT@alpha
+                \ifIIIT@boldauthors
+                    \ifIIIT@bibfirstlast
+                        \bibliographystyle{alpha-fl-bold}%
+                    \else
+                        \bibliographystyle{alpha-lf-bold}%
+                    \fi
+                \else
+                    \ifIIIT@bibfirstlast
+                        \bibliographystyle{alpha-fl-caps}%
+                    \else
+                        \bibliographystyle{alpha-lf-caps}%
+                    \fi
+                \fi
+            \else
+                \ifIIIT@boldauthors
+                    \ifIIIT@bibfirstlast
+                        \bibliographystyle{plain-fl-bold}%
+                    \else
+                        \bibliographystyle{plain-lf-bold}%
+                    \fi
+                \else
+                    \ifIIIT@bibfirstlast
+                        \bibliographystyle{plain-fl-caps}%
+                    \else
+                        \bibliographystyle{plain-lf-caps}%
+                    \fi
+                \fi
+            \fi
+        }{
+            \typeout{^^J** Set style to: German.^^J}
+            \RequirePackage{ngerman}    % <- Anpassung an deutsche Sprache, Umlaute
+            \RequirePackage{bibgerm}    % <- Anpassung an deutsche Literaturdatenbank
+            \ifIIIT@alpha
+                \ifIIIT@boldauthors
+                    \ifIIIT@bibfirstlast
+                        \bibliographystyle{geralpha-fl-bold}%
+                    \else
+                        \bibliographystyle{geralpha-lf-bold}%
+                    \fi
+                \else
+                    \ifIIIT@bibfirstlast
+                        \bibliographystyle{geralpha-fl-caps}%
+                    \else
+                        \bibliographystyle{geralpha-lf-caps}%
+                    \fi
+                \fi
+            \else
+                \ifIIIT@boldauthors
+                    \ifIIIT@bibfirstlast
+                        \bibliographystyle{gerplain-fl-bold}%
+                    \else
+                        \bibliographystyle{gerplain-lf-bold}%
+                    \fi
+                \else
+                    \ifIIIT@bibfirstlast
+                        \bibliographystyle{gerplain-fl-caps}%
+                    \else
+                        \bibliographystyle{gerplain-lf-caps}%
+                    \fi
+                \fi
+            \fi
+        }
+    \fi
+
+    \renewenvironment{thebibliography}[1]{
+        \chapter*{\bibname}%
+        \addcontentsline{toc}{chapter}{\bibname}%
+        \@mkboth{\MakeUppercase\bibname}{\MakeUppercase\bibname}%
+        \list{\@biblabel{\@arabic\c@enumiv}}{%
+            \settowidth\labelwidth{\@biblabel{#1}}%
+            \leftmargin\labelwidth%
+            \advance\leftmargin\labelsep%
+            \@openbib@code%
+            \usecounter{enumiv}%
+            \let\p@enumiv\@empty%
+            \renewcommand\theenumiv{\@arabic\c@enumiv}%
+        }%
+        % \sloppy
+        \clubpenalty4000%
+        \@clubpenalty \clubpenalty%
+        \widowpenalty4000%
+        \sfcode`\.\@m%
+    }{
+        \def\@noitemerr{\@latex@warning{Empty `thebibliography' environment}}%
+        \endlist%
+    }
+\fi

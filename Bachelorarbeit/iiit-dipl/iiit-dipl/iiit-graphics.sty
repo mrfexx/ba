@@ -1,0 +1,61 @@
+%% $Id: iiit-graphics.sty 297 2014-03-13 21:30:14Z lietz $
+%% $Author: lietz $
+%% $Date: 2014-03-13 22:30:14 +0100 (Thu, 13 Mar 2014) $
+%% $Revision: 297 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-graphics}
+
+\newif\ifiiit@floatrowoff \iiit@floatrowofffalse
+\newif\ifiiit@autopstpdf \iiit@autopstpdffalse
+\newif\ifiiit@pstool \iiit@pstoolfalse
+\newif\ifiiit@subfigure \iiit@subfigurefalse
+\newif\ifiiit@beamer \iiit@beamerfalse
+
+\DeclareOption{off}{\PassOptionsToPackage{\CurrentOption}{auto-pst-pdf}}
+\DeclareOption{floatrowoff}{\iiit@floatrowofftrue}
+\DeclareOption{autopstpdfon}{\iiit@autopstpdftrue}
+\DeclareOption{auto-pst-pdfon}{\iiit@autopstpdftrue}
+\DeclareOption{auto-pst-pdf-on}{\iiit@autopstpdftrue}
+\DeclareOption{autopstpdfoff}{\iiit@autopstpdffalse}
+\DeclareOption{auto-pst-pdfoff}{\iiit@autopstpdffalse}
+\DeclareOption{auto-pst-pdf-off}{\iiit@autopstpdffalse}
+\DeclareOption{pstoolon}{\iiit@pstooltrue\iiit@autopstpdffalse}
+\DeclareOption{pstooloff}{\iiit@pstoolfalse}
+\DeclareOption{subfigure}{\iiit@subfiguretrue}
+\DeclareOption{beamer}{\iiit@beamertrue}
+\DeclareOption*{\PassOptionsToClass{\CurrentOption}{caption}\PassOptionsToClass{\CurrentOption}{subfigure}}
+
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{graphicx}
+
+% psfrag, eps2pdf etc.
+\ifiiit@pstool
+	\RequirePackage{pstool}[2013/03/11]         % enth\"alt u. a. psfrag und eps2pdf; pstool v1.5b erforderlich, sonst inkompatibel mit babelbib; Vorteil: perl nicht zwingend erforderlich
+    \RequirePackage{psfrag}
+\fi
+\ifiiit@autopstpdf
+	\RequirePackage{auto-pst-pdf}               % perl erforderlich
+    \RequirePackage{psfrag}
+\fi
+
+% Float-Objekte
+\RequirePackage{caption}                        % Beschriftungen
+\ifiiit@subfigure
+    \RequirePackage{subfigure}                  % veraltet, hier nur uebergansweise noch implementiert
+\else
+    \RequirePackage{subcaption}                 % Unterbeschriftungen
+    \ifiiit@beamer
+        \captionsetup{compatibility=false}
+    \fi
+\fi
+\ifiiit@floatrowoff
+\else
+    \RequirePackage{floatrow}                   % Formatierung von Captions / Nebeneinandersetzen von Bildern
+    \floatsetup[table]{capposition=top}
+\fi

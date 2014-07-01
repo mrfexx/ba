@@ -1,0 +1,98 @@
+%% $Id: iiit-hyper.sty 276 2014-01-29 16:00:41Z nuernberg $
+%% $Author: nuernberg $
+%% $Date: 2014-01-29 17:00:41 +0100 (Wed, 29 Jan 2014) $
+%% $Revision: 276 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-hyper}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paketoptionen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifIIIT@bookmarks \IIIT@bookmarkstrue
+\newif\ifIIIT@hyper \IIIT@hypertrue
+
+\DeclareOption{nobookmarks}{\IIIT@bookmarksfalse}   % Bookmarks im PDF beim "Offnen ausblenden
+\DeclareOption{nohyper}{\IIIT@hyperfalse}           % Hyperref nicht verwenden *
+\DeclareOption{hyper}{\IIIT@hypertrue}              % Abwärtskompatibilität
+\ProcessOptions\relax
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{ifpdf}
+\RequirePackage{xifthen}
+\RequirePackage{iiit-colors}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Hyperref
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Infos zu Hyperref:
+%% - breaklines erm"oglicht Umbruch innerhalb eines Links. Ohne diese Option gehen beispielsweise
+%%   lange "Uberschriften im Inhaltsverzeichnis "uber den rechten Seitenrand, anstatt umgebrochen
+%%   zu werden. Dieses Problem besteht nur bei der "Ubergabe der dvips-Option
+%% - Alternative: Grafiktreiber nicht explizit als Option an hyperref "ubergeben. In diesem Fall
+%%   wird als Defaultoption "hypertex" angenommen. Damit Hypertex funktioniert, muss dvips mit
+%%   der Option -z aufgerufen werden. Funktioniert prinzipiell auch. Achtung: hyperfootnotes=false
+%%   muss an hyperref "ubergeben werden, damit Fu"snoten nicht verlinkt werden. Andernfalls gibt es
+%%   bei der Ausf"uhrung von dvips eine Fehlermeldung wenn \thanks in der Titelseite verwendet wird.
+%%   (Liegt wahrscheinlich an den entsprechenden Pfuschbefehlen im Classfile.)
+
+% URL-Makro wird teilweise von JabRef verwendet und muss daher definiert werden.
+% Das Makro wird hier als wirkungslos definiert. Ggf. wird die Definition von Hyperref "uberschrieben.
+% Diese setzt URL in Typewriter-Schrift und verbindet sie mit einem Hyperlink, was aber bei Umbr"uchen
+% in einer URL schief l"auft. Der Adobe-Reader erkennt Web- und E-Mail-Adressen aber sowieso automatisch!
+\@ifpackageloaded{hyperref}{}{ % Warnungen bei mehrmaligem Laden des Pakets verhindern
+    \ifIIIT@hyper
+        \ifpdf
+            \PassOptionsToPackage{hyphens}{url}
+            \ifIIIT@bookmarks
+                \RequirePackage[bookmarks=true]{hyperref}
+            \else
+                \RequirePackage[bookmarks=false]{hyperref}
+            \fi
+        \else
+            \ifIIIT@bookmarks
+                \RequirePackage[dvips,bookmarks=true]{hyperref}
+            \else
+                \RequirePackage[dvips,bookmarks=false]{hyperref}
+            \fi
+            \def\url#1{#1}
+        \fi
+        \urlstyle{same}
+
+        \PassOptionsToPackage{hyperref}{ntheorem}%
+        \PassOptionsToPackage{hyperref}{xnomentbl}
+        \typeout{Using hyperref^^J}
+
+        \hypersetup{
+            colorlinks,             % bei colorlinks=false werden farbige Rahmen um Links angezeigt
+            citecolor = spotcolor,  % Farbe der citation Links
+            linkcolor = spotcolor,  % Farbe der internen Links
+            filecolor = spotcolor,  % Farbe der Datei-Links
+            anchorcolor = black,    % Farbe f"ur Anchortext
+            urlcolor = spotcolor,   % Farbe der URLs
+            breaklinks,             % Umbr"uche innerhalb von Links erlauben
+        }
+
+        %% Folgende Einstellungen erst bei \begin{document} => Autor und Titel definiert
+
+        \AtBeginDocument{
+            \hypersetup{
+                pdfauthor={\@author},
+                pdftitle={\@title},
+                pdfcreator={Ghostscript},
+                pdfproducer={LaTeX 2e}
+            }
+            \ifthenelse{\isundefined{\IIIT@arbeittyp}}{}{\hypersetup{pdfsubject={\IIIT@arbeittyp}}}
+        }
+    \else
+        \typeout{Package hyperref is NOT used!^^J}
+    \fi
+}

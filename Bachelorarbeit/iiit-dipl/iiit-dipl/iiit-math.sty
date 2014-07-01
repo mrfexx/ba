@@ -1,0 +1,218 @@
+%% $Id: iiit-math.sty 311 2014-06-03 15:39:01Z michelsburg $
+%% $Author: michelsburg $
+%% $Date: 2014-06-03 17:39:01 +0200 (Tue, 03 Jun 2014) $
+%% $Revision: 311 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-math}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paketoptionen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifIIIT@empheq \IIIT@empheqfalse % default: amsmath statt empheq laden
+\newif\ifIIIT@xnomentbl \IIIT@xnomentblfalse
+\newif\ifIIIT@beamer \IIIT@beamerfalse
+
+\DeclareOption{empheq}{\IIIT@empheqtrue} %
+\DeclareOption{amsmath}{\IIIT@empheqfalse} % (default)
+\DeclareOption{xnomentbl}{\IIIT@xnomentbltrue}
+\DeclareOption{beamer}{\IIIT@beamertrue}
+
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{cancel}             % K\"urzen
+\RequirePackage{exscale}            % Anpassung von Summen- und Produktzeichen an Schriftgr\"o\sse
+\RequirePackage{subdepth}           % Damit Subscripte stets die gleiche Tiefe haben, unabh\"angig ob Superscripte vorhanden sind
+\RequirePackage{xstring}
+
+\ifIIIT@empheq
+    \RequirePackage[fleqn,intlimits]{empheq} % Erweiterter Befehlssatz
+\else
+    \PassOptionsToPackage{intlimits,fleqn}{amsmath}%
+	\RequirePackage{amsmath}%
+	\PassOptionsToPackage{amsmath,hyperref}{ntheorem}%
+\fi
+\RequirePackage{trfsigns}% Korrespondezsymbole (nur horizontal)
+\RequirePackage{amssymb}%
+\RequirePackage[mathscr]{eucal}% Transformationen
+\RequirePackage{array}%
+\RequirePackage{esint}		    	% Doppelintegrale
+
+% Abkürzungen, Symbole und Glossar mit xnomentbl
+\ifIIIT@xnomentbl
+        \RequirePackage[intoc]{xnomentbl}
+        \RequirePackage[oosym]{xsymtbl}   % Neue Symbole definieren, Symboliste erzeugen
+        \RequirePackage{xsubsuptbl}		  % Neue Symbole definieren, Symboliste erzeugen
+        \def\mathplaceholdersymbol{\left(\bullet\right)}
+        \RequirePackage{xabbrtbl}		  % Neue Symbole definieren, Symboliste erzeugen
+        \RequirePackage{xmathoptbl}		  % Neue Symbole definieren, Symboliste erzeugen
+        \def\nomentblfirstcolwidth{2cm}
+        \RequirePackage{xglostbl}		  % Glossar
+        \RequirePackage{xparamtbl}		  % Parameter
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Definitionen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand{\IfLowercaseGreek}[3]{
+    \normalexpandarg
+    \IfSubStr{\alpha\beta\gamma\delta\epsilon\varepsilon\zeta\eta\theta\vartheta\iota\kappa\lambda\mu\nu\xi\pi\varpi\rho\varrho\sigma\varsigma\tau\upsilon\phi\varphi\chi\psi\omega}{#1}
+        {#2}
+        {#3}
+}
+\newcommand{\IfUppercaseGreek}[3]{
+    \normalexpandarg
+    \IfSubStr{\Gamma\Delta\Theta\Lambda\Xi\Pi\Sigma\Upsilon\Phi\Psi\Omega\II}{#1}
+        {#2}
+        {#3}
+}
+\newcommand{\IfGreek}[3]{
+    \IfLowercaseGreek{#1}{#2}{\IfUppercaseGreek{#1}{#2}{#3}}
+}
+
+% Vektoren und Matrizen werden fett gedruckt
+\ifIIIT@beamer
+    \renewcommand{\vec}[1]{
+        \IfGreek{#1}{\boldsymbol{#1}}{\mathbf{#1}}
+    }
+\else
+    % \renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}}
+    \renewcommand{\vec}[1]{
+        \IfLowercaseGreek{#1}{\boldsymbol{#1}}{\boldsymbol{\mathbf{#1}}}
+    }
+    
+\fi
+
+% Stochastische Größen in Typewriter
+\newcommand{\stoch}[1]{\ensuremath{\mathtt{#1}}}
+
+
+% Zahlenmengen
+\newcommand{\rz}{\mathbb{R}}
+\newcommand{\nz}{\mathbb{N}}
+\newcommand{\gz}{\mathbb{Z}}
+\newcommand{\cz}{\mathbb{C}}
+\newcommand{\qz}{\mathbb{Q}}
+
+% Indizes für Eingang- und Ausgang
+\DeclareMathOperator{\ee}{e}  % Eulersche Zahl
+\DeclareMathOperator{\EE}{E}
+\DeclareMathOperator{\ww}{w}
+\DeclareMathOperator{\sss}{s} %\renewcommand{\ss}{\sss} 
+\DeclareMathOperator{\aaa}{a}\renewcommand{\aa}{\aaa} % \aa gab es schon
+\DeclareMathOperator{\AAA}{A}\renewcommand{\AA}{\AAA} % \AA gab es schon
+
+% Indizes für Abtastung
+\newcommand{\abtast}{\mathrm{A}}
+
+%Indices die keiner nummerierung entsprechen
+\newcommand{\namingIndex}[1]{\mathrm{#1}}
+
+
+% Differentiale
+\DeclareMathOperator{\ddd}{d}
+
+% Einheitsmatrix
+\DeclareMathOperator{\II}{I}
+
+% Erwartungswert
+\newcommand{\E}[1]{\mathrm{E}\!\left\{{#1}\right\}}
+
+% Größten gemeinsame Teile und kleinster gemeineinsames Vielfaches
+\DeclareMathOperator{\ggT}{ggT}
+\DeclareMathOperator{\kgV}{kgV}
+
+% imaginäre Einheit
+\DeclareMathOperator{\jj}{j}
+\DeclareMathOperator{\ii}{i}
+
+% Fehlende Funktionsnamen
+\DeclareMathOperator{\Res}{Res}
+\DeclareMathOperator{\sinc}{si}
+\DeclareMathOperator{\Sinc}{sinc}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\rang}{rang}
+
+% Transponieren einer Matrix
+\newcommand{\TT}{\mathrm{T}}
+
+% Schriftgrößen in Mathematikumgebung
+\newcommand{\T}{\textstyle}
+\newcommand{\D}{\displaystyle}
+
+% Macros für häufige mathematische Ausdrücke
+\newcommand{\eexp}[1]{\ee^{#1}} % Exponentialfunktion
+\newcommand{\dd}{\;\ddd\!} % Differential
+\newcommand{\sbe}{\stackrel{!}{=}} % ! über = (soll gelten)
+\newcommand{\entspr}{\;\widehat =\;} % entspricht
+\newcommand{\pow}[1]{\cdot 10^{#1}} % mal 10 hoch
+\newcommand{\norm}[1]{\left\Vert #1 \right\Vert } % Norm
+\newcommand{\abs}[1]{\left| #1 \right|} % Betrag
+\newcommand{\infint}{\int_{-\infty }^\infty } % Integral von -unendlich bis + unendlich
+\newcommand{\vr}[2]{\ensuremath{\left(\begin{array}{c}#1\\#2\end{array}\right)}} % Vektoren der Dimension 2
+\newcommand{\InP}[2]{\langle{#1}|{#2}\rangle} % Innenprodukt
+\newcommand{\TZ}{\hspace{2mm}\laplace\hspace{2mm}} % Hantelsymbol Hintransformation
+\newcommand{\ZT}{\hspace{2mm}\Laplace\hspace{2mm}} % Hantelsymbol Rücktransformation
+\newcommand{\vTZ}{\hspace{.75ex}\rotatebox[origin=c]{270}{\laplace}\hspace{.75ex}}
+\newcommand{\vZT}{\hspace{.75ex}\rotatebox[origin=c]{270}{\Laplace}\hspace{.75ex}}
+
+% zweidimensionale Transformationen
+\newcommand{\laplacez}{\mbox{\setlength{\unitlength}{0.1em}% zweidimensionales Hantelsymbol Hintransformation
+ \begin{picture}(20,10)%
+  \put(2,3){\circle{4}}%
+  \put(4,2.5){\line(1,0){13}}%
+  \put(4,3.5){\line(1,0){13}}%
+  \put(18,3){\circle*{4}}%
+ \end{picture}%
+ }%
+}%
+\newcommand{\Laplacez}{\rotatebox[origin=c]{180}{\laplacez}}
+\newcommand{\TZz}{\hspace{2mm}\laplacez\hspace{2mm}} % Hantelsymbol Hintransformation
+\newcommand{\ZTz}{\hspace{2mm}\Laplacez\hspace{2mm}} % Hantelsymbol Rücktransformation
+\newcommand{\vTZz}{\hspace{.75ex}\rotatebox[origin=c]{270}{\laplacez}\hspace{.75ex}}
+\newcommand{\vZTz}{\hspace{.75ex}\rotatebox[origin=c]{270}{\Laplacez}\hspace{.75ex}}
+
+
+
+
+\newcommand{\lint}[4]{\int\limits_{{#1}={#2}}^{#3}{#4}} %#1: Variable über die integriert wird, #2: untere grenze, #3: obere Grenze, #4 Term der integriert wird
+\newcommand{\usum}[2]{\sum\limits_{{#1}=-\infty}^{\infty}{#2}} %#1: Variabel über die summiert wird #2: Term der summiert wird
+\newcommand{\lsum}[4]{\sum\limits_{{#1}={#2}}^{#3}{#4}}%#1: Variable über die summiert wird, #2: untere grenze, #3: obere Grenze, #4 Term der summiert wird
+\newcommand{\uint}[1]{\int\limits_{-\infty}^{\infty}{#1}} %#1:  Term der integriert wird
+\newcommand{\ndiff}[2]{\Delta_{\namingIndex{n},{#2}}{#1}}
+
+%Transformationen
+\newcommand{\FT}{\mathscr{F}} % Fouriertransformation
+\newcommand{\iFT}{\mathscr{F}^{-1}} % inverse Fouriertransformation
+
+
+% Real und Imaginärteil
+\DeclareMathOperator{\Real}{Re}
+\DeclareMathOperator{\Imag}{Im}
+\renewcommand{\Re}[1][]{
+  \ifthenelse{\isempty{#1}}
+    {\Real}
+    {\Real\left\{#1\right\}}}%\Re[s]
+\renewcommand{\Im}[1][]{
+  \ifthenelse{\isempty{#1}}
+    {\Imag}
+    {\Imag\left\{#1\right\}}}%\Im[s]
+
+% Matrizen (ben"otigt empheq v 2.11)
+%\ifiiit@empheq
+      \newcommand{\cmatrix}[1]{\begin{bmatrix*}[c] #1 \end{bmatrix*}}
+      \newcommand{\rmatrix}[1]{\begin{bmatrix*}[r] #1 \end{bmatrix*}}
+      \newcommand{\lmatrix}[1]{\begin{bmatrix*}[l] #1 \end{bmatrix*}}
+%\else
+%      \ClassWarning{iiit-math}{Matrix macros could not be defined. Empheq required!}
+%\fi
+
+% Schriftgröße in Formeln
+\def\T{\textstyle}
+\def\D{\displaystyle}

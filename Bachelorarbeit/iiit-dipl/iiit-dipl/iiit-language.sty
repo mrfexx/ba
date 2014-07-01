@@ -1,0 +1,26 @@
+%% $Id: iiit-language.sty 300 2014-04-30 15:13:25Z nuernberg $
+%% $Author: nuernberg $
+%% $Date: 2014-04-30 17:13:25 +0200 (Wed, 30 Apr 2014) $
+%% $Revision: 300 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-language}
+\newif\ifiiit@english \iiit@englishfalse
+\DeclareOption{english}{\iiit@englishtrue}                     % Alle vordefinierten Begriffe auf Englisch
+\DeclareOption{deutsch}{\iiit@englishfalse}                    % Alle vordefinierten Begriffe auf Deutsch (Default)
+\DeclareOption{german}{\iiit@englishfalse}                     % Alle vordefinierten Begriffe auf Deutsch (Default)
+\DeclareOption{ngerman}{\iiit@englishfalse}                    % Alle vordefinierten Begriffe auf Deutsch (Default)
+\ProcessOptions\relax
+
+\ifiiit@english
+    \RequirePackage[ngerman,english]{babel}   % Erm"oglicht deutsche Trennung und Umlaute bei der Eingabe
+    \PassOptionsToPackage{ngerman,english}{translator}
+    \AtBeginDocument{\selectlanguage{english}}
+    \selectlanguage{english}
+\else
+    \RequirePackage[english,ngerman]{babel}   % Erm"oglicht deutsche Trennung und Umlaute bei der Eingabe
+    \PassOptionsToPackage{english,ngerman}{translator}
+    \AtBeginDocument{\selectlanguage{ngerman}}
+    \selectlanguage{ngerman}
+\fi
+

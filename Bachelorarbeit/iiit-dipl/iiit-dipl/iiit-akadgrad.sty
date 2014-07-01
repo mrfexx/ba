@@ -1,0 +1,42 @@
+% -*- TeX -*- -*- DE -*-
+%
+% Stylesheet für akademischen Grad
+% Diplom und Doktorgrade davor, Bachelor, Master und Magistergrad dahinter (Quelle: http://de.wikipedia.org/wiki/Akademischer_Grad -> Form der Führung)
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-akadgrad}%
+  [2012/11/08 0.1 Akademischen Grad davor bzw. dahinter setzen]
+
+\RequirePackage{ifthen}
+
+\newif\ifIIIT@akadgradinfront \IIIT@akadgradinfrontfalse % default: false (=dahinter, da jetzt fast nur noch für Masterarbeit der Bachelor relevant)
+
+\newcommand{\IIIT@akadgrad}{} %
+
+\newcommand{\akadgrad}[1]{%
+\renewcommand{\IIIT@akadgrad}{#1}% 
+%Default ist dahinter, daher müssen nur Diplom und Dr Grade geprüft und als davor gesetzt werden
+\ifthenelse{\equal{#1}{cand. el.}}{\IIIT@akadgradinfronttrue}{}
+\ifthenelse{\equal{#1}{Dipl.-Inf.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dipl.-Ing.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr.-Ing.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. rer. nat.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. phil.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. techn.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. med.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. iur.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. jur.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. rer. oec.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. rer. pol.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{Dr. rer. mont.}}{\IIIT@akadgradinfronttrue}{}%
+\ifthenelse{\equal{#1}{}}{\IIIT@akadgradinfronttrue}{}%
+}
+
+\newcommand{\IIIT@fullauthor}{%
+    \ifIIIT@akadgradinfront %akademischer Grad bei Diplomarbeiten davor
+        \IIIT@akadgrad~\@author%
+    \else %sonst akademischer Grad (bei Bachelor-, Masterarbeit, ...) dahinter
+        \@author,~\IIIT@akadgrad%
+    \fi
+} %
+\endinput

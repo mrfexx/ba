@@ -1,0 +1,79 @@
+% -*- TeX -*- -*- DE/EN -*-
+\documentclass[
+%%%% --- Kodierung ---
+    ,latin1                 % latin1 Kodierung
+    %,utf8                   % UTF-8 Kodierung
+    %,ansinew                % ansinew Kodierung
+%%%% --- Sprache ---
+    ,deutsch                % Deutsch
+    %,english                % Englisch
+%%%% --- Druck ---
+    ,twoside                % beidseitiger Ausdruck
+    %,oneside                % einseitiger Ausdruck
+%%%% --- Mathe ---
+    %,amsmath                % amsmath laden
+    ,empheq                 % empheq statt amsmath laden
+%%%% --- Bibliographie ---
+    %,biblatex               % BibLaTeX anstatt BibTeX verwenden
+%%%% --- Quellcode ---
+    ,lst                    % Listings-Paket laden
+%%%% --- Lesezeichen ---
+    %,nohyper                % keine hyperrefs verwenden
+    %,nobookmarks            % Bookmarks im PDF beim "Offnen ausblenden
+%%%% --- auto-pst-pdf ---
+    ,off                    % auto-pst-pdf ausschalten
+%%%% --- subfigures ---
+    %,subfigure               % subfigure- anstatt subcaption-Paket verwenden
+                             % subfigure-Paket nicht mehr verwenden, wenn mit neuer Arbeit begonnen wird (Paket ist veraltet)
+%%%% KOMA-Script Optionen ---
+    %,parskip=half           % fuer Absatzabstand statt -einzug
+]{iiit-dipl}
+
+\input{erweiterungen.tex}
+
+\title{Example title}
+\arbeittyp{master}  % master,diplom,bachelor,student
+\author{Siggi Signal}
+\akadgrad{Dipl.-Ing.} %akademischer Grad B.Sc., M.Sc., B.Eng., ...
+\datevon{01.01.2010}
+\datebis{30.06.2010}
+\referent{Prof. Dr.-Ing. Fernando Puente Le\'{o}n}%
+\betreuer{Dipl.-Ing. Max Mustermann \and Dr.-Ing. Hans Maier\thanks{XYZ AG - Karlsruhe} \and Dipl.-Ing. John Doe\samethanks}
+
+%%>> nur für option:biblatex geeignet
+%\addbibresource{diplom.bib}
+%\AtEveryBibitem{
+%    \clearlist{language}
+%}
+%%<< nur für option:biblatex geeignet
+
+\begin{document}
+\frontmatter
+      \maketitle
+      \include{abstract}
+      \tableofcontents
+      \listoffigures
+      \listoftables
+
+\mainmatter
+      \include{dipl_1}
+      \include{dipl_2}
+      \appendix
+      \input{Anhang}
+
+
+\backmatter
+
+% \addcontentsline{toc}{chapter}{Literaturverzeichnis}
+%%>> NICHT BEI option:biblatex!!!
+			\bibliography{diplom}
+%%<< NICHT BEI option:biblatex!!!
+
+%%>> nur für option:biblatex geeignet
+%% Achtung: BibTeX command has to be 
+%%		biber.exe "%bm" -q
+%% now, where %bm is the full path of main file name without extension
+%    %\selectlanguage{ngerman}
+%		\printbibliography[heading=bibintoc]
+%%<< nur für option:biblatex geeignet
+\end{document}

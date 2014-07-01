@@ -6,3 +6,5 @@ Bild_Ausgabe=rgb2gray(Bild1);
 imshow(Bild_Ausgabe);
 end
 
+
+

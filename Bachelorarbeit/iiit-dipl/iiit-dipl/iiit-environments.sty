@@ -1,0 +1,205 @@
+%% $Id: iiit-environments.sty 314 2014-06-23 06:37:17Z nuernberg $
+%% $Author: nuernberg $
+%% $Date: 2014-06-23 08:37:17 +0200 (Mon, 23 Jun 2014) $
+%% $Revision: 314 $
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{iiit-environments}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Paketoptionen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newif\ifiiit@ntheoremoff \iiit@ntheoremofffalse
+
+\DeclareOption{ntheoremoff}{\iiit@ntheoremofftrue} %Schalter um ntheorem abzuschalten, z.B. für Beamer notwendig
+\ProcessOptions\relax
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% ben\"otigte Pakete
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\RequirePackage{babel}
+\RequirePackage{amssymb}
+\RequirePackage{iiit-colors}
+\ifiiit@ntheoremoff
+\else
+    \RequirePackage[thmmarks]{ntheorem}
+\fi
+\RequirePackage{ifthen}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Sprache
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Begriffe
+\newcommand{\IIIT@Definition}{}
+\newcommand{\IIIT@Example}{}
+\newcommand{\IIIT@Theorem}{}
+\newcommand{\IIIT@Proof}{}
+\newcommand{\IIIT@Remark}{}
+
+% deutsch
+\addto\captionsngerman{\renewcommand{\IIIT@Definition}{Definition}}
+\addto\captionsngerman{\renewcommand{\IIIT@Example}{Beispiel}}
+\addto\captionsngerman{\renewcommand{\IIIT@Theorem}{Satz}}
+\addto\captionsngerman{\renewcommand{\IIIT@Proof}{Beweis}}
+\addto\captionsngerman{\renewcommand{\IIIT@Remark}{Bemerkung}}
+
+% english
+\addto\captionsenglish{\renewcommand{\IIIT@Definition}{Definition}}
+\addto\captionsenglish{\renewcommand{\IIIT@Example}{Example}}
+\addto\captionsenglish{\renewcommand{\IIIT@Theorem}{Theorem}}
+\addto\captionsenglish{\renewcommand{\IIIT@Proof}{Proof}}
+\addto\captionsenglish{\renewcommand{\IIIT@Remark}{Remark}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theorem-Umgebungen
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Z"ahler
+\@ifundefined{chapter}{
+    \newcommand{\thcounter}{section}
+    \newcommand{\thethcounter}{\thesection}
+}{
+    \newcommand{\thcounter}{chapter}
+    \newcommand{\thethcounter}{\thechapter}
+}
+
+% Symbole
+\newcommand{\IIIT@DefinitionSymbol}{}
+\newcommand{\setdefinitionsymbol}[1]{\renewcommand{\IIIT@DefinitionSymbol}{\ifthenelse{\equal{#1}{}}{}{{\spotcolor#1}}}}
+
+\newcommand{\IIIT@SatzSymbol}{}
+\newcommand{\setsatzsymbol}[1]{\renewcommand{\IIIT@SatzSymbol}{\ifthenelse{\equal{#1}{}}{}{{\spotcolor#1}}}}
+
+\newcommand{\IIIT@BeweisSymbol}{{\spotcolor$\blacksquare$}}
+\newcommand{\setbeweissymbol}[1]{\renewcommand{\IIIT@BeweisSymbol}{\ifthenelse{\equal{#1}{}}{}{{\spotcolor#1}}}}
+
+\newcommand{\IIIT@BemerkungSymbol}{}
+\newcommand{\setbemerkungsymbol}[1]{\renewcommand{\IIIT@BemerkungSymbol}{\ifthenelse{\equal{#1}{}}{}{{\spotcolor#1}}}}
+
+\newcommand{\IIIT@BeispielSymbol}{}
+\newcommand{\setbeispielsymbol}[1]{\renewcommand{\IIIT@BeispielSymbol}{\ifthenelse{\equal{#1}{}}{}{{\spotcolor#1}}}}
+
+
+\ifiiit@ntheoremoff
+
+    % Schriftarten anpassen
+    \newcommand{\IIIT@satzfont}{\normalfont\normalcolor}%\slshape}
+    \newcommand{\IIIT@beweisfont}{\normalfont\normalcolor}%\slshape}
+    \newcommand{\IIIT@definitionfont}{\normalfont\normalcolor}%\slshape}
+    \newcommand{\IIIT@beispielfont}{\normalfont\normalcolor}
+    \newcommand{\IIIT@bemerkungfont}{\normalfont\normalcolor}
+
+    % Definition
+    \newcounter{definition}[\thcounter]
+    \renewcommand{\thedefinition}{\thethcounter.\arabic{definition}}
+
+    \newenvironment{definition}[1][]
+    {
+        \list{}{\leftmargin1em \labelwidth\z@ \itemindent-\leftmargin
+            \let\makelabel\descriptionlabel}
+        \refstepcounter{definition}
+        \item[\IIIT@Definition~\thedefinition]\hspace{-\labelsep}\hspace{-\labelsep}\descriptionlabel\ifthenelse{\equal{#1}{}}{}{:~#1} \IIIT@definitionfont \hfill \par
+        \nopagebreak
+    }{
+        \hfill\IIIT@DefinitionSymbol\endlist
+    }
+
+    % Satz
+    \newcounter{satz}[\thcounter]
+    \renewcommand{\thesatz}{\thethcounter.\arabic{satz}}
+
+    \newenvironment{satz}[1][]
+    {
+        \list{}{\leftmargin1em \labelwidth\z@ \itemindent-\leftmargin
+            \let\makelabel\descriptionlabel}
+        \refstepcounter{satz}
+        \item[\IIIT@Theorem~\thesatz]\hspace{-\labelsep}\hspace{-\labelsep}\descriptionlabel\ifthenelse{\equal{#1}{}}{}{:~#1} \IIIT@satzfont \hfill \par
+        \nopagebreak
+    }{
+        \hfill\IIIT@SatzSymbol\endlist
+    }
+
+    % Beweis
+    \newcounter{beweis}[\thcounter]
+    \renewcommand{\thebeweis}{\thethcounter.\arabic{beweis}}
+    
+    \newenvironment{beweis}[1][]
+    {
+        \list{}{\leftmargin1em \labelwidth\z@ \itemindent-\leftmargin
+            \let\makelabel\descriptionlabel}
+        \refstepcounter{beweis}
+        \item[\IIIT@Proof~\thebeweis]\hspace{-\labelsep}\hspace{-\labelsep}\descriptionlabel\ifthenelse{\equal{#1}{}}{}{:~#1} \IIIT@beweisfont \hfill \par
+        \nopagebreak
+    }{
+        \hfill\IIIT@BeweisSymbol\endlist
+    }
+
+    % Beispiel
+    \newcounter{beispiel}[\thcounter]
+    \renewcommand{\thebeispiel}{\thethcounter.\arabic{beispiel}}
+
+    \newenvironment{beispiel}[1][]
+    {
+        \list{}{\leftmargin1em \labelwidth\z@ \itemindent-\leftmargin
+            \let\makelabel\descriptionlabel}
+        \refstepcounter{beispiel}
+        \item[\IIIT@Example~\thebeispiel]\hspace{-\labelsep}\hspace{-\labelsep}\descriptionlabel\ifthenelse{\equal{#1}{}}{}{:~#1} \IIIT@beispielfont \hfill \par
+        \nopagebreak
+    }{
+        \hfill\IIIT@BeispielSymbol\endlist
+    }
+
+    % Bemerkung
+    \newcounter{bemerkung}[\thcounter]
+    \renewcommand{\thebemerkung}{\thethcounter.\arabic{bemerkung}}
+
+    \newenvironment{bemerkung}[1][]
+    {
+        \list{}{\leftmargin1em \labelwidth\z@ \itemindent-\leftmargin
+            \let\makelabel\descriptionlabel}
+        \refstepcounter{bemerkung}
+        \item[\IIIT@Remark~\thebemerkung]\hspace{-\labelsep}\hspace{-\labelsep}\descriptionlabel\ifthenelse{\equal{#1}{}}{}{:~#1} \IIIT@bemerkungfont \hfill \par
+        \nopagebreak
+    }{
+        \endlist
+    }
+
+    % Description
+    % Analoge Ab"anderung der description-Umgebung (kleinerer linker Rand)
+    \renewenvironment{description}{
+        \list{}{\leftmargin1em \labelwidth\z@ \itemindent-\leftmargin
+            \let\makelabel\descriptionlabel}
+    }{
+        \endlist
+    }
+
+\else
+    \theorempreskipamount2\bigskipamount%
+    \theorempostskipamount2\bigskipamount%
+    \theoremstyle{break}
+    \theoremheaderfont{\hspace{-1.5em}\hspace{-\labelsep}\descriptionlabel\spotcolor}
+    \theorembodyfont{\normalfont}
+    \theoremindent1.5em
+    
+    \theoremsymbol{\IIIT@DefinitionSymbol}
+    \newtheorem{definition}{\IIIT@Definition}[\thcounter]
+    
+    \theoremsymbol{\IIIT@SatzSymbol}
+    \newtheorem{satz}{\IIIT@Theorem}[\thcounter]
+    
+    \theoremsymbol{\IIIT@BeweisSymbol}
+    \newtheorem{beweis}{\IIIT@Proof}[\thcounter]
+    
+    \theoremsymbol{\IIIT@BemerkungSymbol}
+    \newtheorem{bemerkung}{\IIIT@Remark}[\thcounter]
+    
+    \theoremsymbol{\IIIT@BeispielSymbol}
+    \newtheorem{beispiel}{\IIIT@Example}[\thcounter]
+    
+    \newcommand{\thmmark}{\hspace*{\fill}\ensuremath\blacksquare}
+\fi
