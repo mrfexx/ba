@@ -11,6 +11,7 @@ colormap(map);
 figure(1);
 subplot(2,2,1);
 imagesc(Bild_Ausgabe);
+%Ausgabe
 
 
 
