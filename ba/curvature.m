@@ -17,11 +17,12 @@ Bild_ind = im2double(Bild_ind);
 [Lxx,Lxy] = gradient(Lx);
 [~,Lyy]=gradient(Ly);
 figure('name','Funktion contour mit unsortierten Gradienten'), contour(Bild_ind), hold on, quiver(Lx, Ly), hold off
+
 k= (-(Ly.^2).*Lxx + 2.*Lx.*Ly.*Lxy - (Lx.^2).*Lyy)./((((Lx.^2) + (Ly.^2)).^3/2)+eps);
 
-%figure(1);
+figure('name', 'kkk');
 %subplot(2,1,2);
-%imshow(k, map); 
+imshow(k, map); 
 
 
 curvedness = sqrt(Lxx.^2 + 2*Lxy.^2 + Lyy.^2);
