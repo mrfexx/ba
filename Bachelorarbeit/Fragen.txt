@@ -1,0 +1,3 @@
+-Wie soll am Ende das Programm aussehen: Eigenes Programm mit Oberfläche oder nur Funktionen in Matlab?
+
+-Github? Geht das weil public Repository
