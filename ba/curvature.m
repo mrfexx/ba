@@ -18,7 +18,7 @@ Bild_ind = im2double(Bild_ind);
 [~,Lyy]=gradient(Ly);
 figure('name','Funktion contour mit unsortierten Gradienten'), contour(Bild_ind), hold on, quiver(Lx, Ly), hold off
 
-k= (-(Ly.^2).*Lxx + 2.*Lx.*Ly.*Lxy - (Lx.^2).*Lyy)./((((Lx.^2) + (Ly.^2)).^3/2)+eps);
+k = (-(Ly.^2).*Lxx + 2.*Lx.*Ly.*Lxy - (Lx.^2).*Lyy)./((((Lx.^2) + (Ly.^2)).^3/2)+eps);
 
 figure('name', 'kkk');
 %subplot(2,1,2);
