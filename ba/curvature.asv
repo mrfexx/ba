@@ -33,11 +33,11 @@ curvedness = sqrt(Lxx.^2 + 2*Lxy.^2 + Lyy.^2);
 D = - (((Lx.^2 + Ly.^2))+eps)./((Ly.^2.*Lxx - 2*Lx.*Lxy.*Ly + Lx.^2.*Lyy)+eps);
 for k = 1:width
     for l = 1:height
-        if D(k,l) > 40 
-            D(k,l)=40;
+        if D(k,l) > 50 
+            D(k,l)=50;
         end
-        if D(k,l) < -40
-            D(k,l)=40;
+        if D(k,l) < -50
+            D(k,l)=50;
         end
     end
 end
@@ -65,13 +65,14 @@ figure('name','Lxx,Lxy'), quiver(Lxx,Lxy);
     %wd_Dx, hg_Dx, wd_Dy, hg_Dy
     width  = int32(width);
     height = int32(height);
-centermap(1:width,1:height)=int32(0);
-for i= 1:width
+
+    for i= 1:width
     for j=1:height
         x = i + round(Dx(i,j));
         y = j + round(Dy(i,j));
-        if x > 0 && x < 55 && y < 57 && y> 0
-            centermap(x,y) = curvedness(i, j);
+           
+        if D(i,j) > 0
+            centermap(x,y) = centermap(x,y) + curvedness(i,j);
         end
     end
 end
